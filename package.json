@@ -1,0 +1,10 @@
+{
+  "name": "hakaton-api",
+  "packageManager": "yarn@3.6.4",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
