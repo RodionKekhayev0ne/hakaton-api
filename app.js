@@ -4,7 +4,7 @@ const http = require('http');
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
-    const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working'
+    const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working!!!'
     res.end(message);
 });
 
@@ -17,7 +17,7 @@ server.listen(PORT, () => {
 
 
 function sendMessage(){
-    const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working'
+    const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working!!!'
     console.log(message)
     return message
 }
