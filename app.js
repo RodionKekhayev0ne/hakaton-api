@@ -5,8 +5,8 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working in api!!!'+
-      '\n' + 'powered by Kekhayev Rodion'
-  +'\n' + 'Hello Ksenia!!!'
+      '\n' + 'powered by Kekhayev Rodion!!!'
+  +
     res.end(message);
 });
 
