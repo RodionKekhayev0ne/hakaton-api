@@ -1,22 +1,26 @@
 // index.js
+const dbconnect = require('./database/db-connection')
 const http = require('http');
+const express = require('express');
+const app = express();
+const regauth = require('./routes/reg-auth')
+const student = require('./routes/student-funcs')
+const teacher = require('./routes/teacher-funcs')
+const admin = require('./routes/admin-funcs')
+const visit = require('./routes/visit')
+const Admin = require('./database/tables/admin');
+app.use(express.json());
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    const message = 'API is working, don`t worry be happy!!!' + '\n' + 'GitHub Hooks also working in api!!!'+
-      '\n' + 'powered by Kekhayev Rodion!!!'
-      + '\n' + 'Git hooks and Docker is working!!!'
+// Middleware для обработки данных формы (URL-encoded)
+app.use(express.urlencoded({ extended: true }));
 
-    res.end(message);
-});
+
 
 const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
+dbconnect();
 
 
 function sendMessage(){
@@ -24,5 +28,9 @@ function sendMessage(){
     console.log(message)
     return message
 }
-
+app.use('/regauth', regauth);
+app.use('/student', student);
+app.use('/teacher', teacher);
+app.use('/admin', admin);
+app.use('/visit', visit);
 sendMessage()
