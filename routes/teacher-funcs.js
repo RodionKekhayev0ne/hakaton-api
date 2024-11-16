@@ -8,7 +8,7 @@ teacher.get('/', (req, res) => {
 });
 
 // Пример маршрута для страницы профиля
-teacher.get('/profile', (req, res) => {
+teacher.post('/getLessonId', (req, res) => {
   res.send('This is the Profile Page!');
 });
 

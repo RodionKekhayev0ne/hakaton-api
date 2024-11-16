@@ -8,7 +8,9 @@ const Teacher = require('../database/tables/teacher')
 admin.post('/createLesson', async (req, res) => {
   const {lesson_title, phone_number} = req.body;
   try {
-    const teacher = await Teacher.findOne({phoneNumber: phone_number});
+    const teacher = await Teacher.findOne({
+      phoneNumber: phone_number
+    });
 
     if (!teacher) {
       throw new Error('Учитель с указанным номером телефона не найден');
@@ -18,13 +20,15 @@ admin.post('/createLesson', async (req, res) => {
       title: lesson_title,
       teacher: teacher._id,
     })
-    await newLesson.save()
+    await newLesson.save();
+    teacher.lessons.push(newLesson._id);
+    console.log(teacher.lessons)
+    await teacher.save();
     res.send('Lesson ' + lesson_title + ' created');
   } catch (error) {
     console.log(error)
     res.status(400).send('something wrong');
   }
-
 
 });
 

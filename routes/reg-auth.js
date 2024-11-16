@@ -5,9 +5,73 @@ const Student = require('../database/tables/student');
 const Teacher = require('../database/tables/teacher');
 const Admin = require('../database/tables/admin');
 const bcrypt = require('bcrypt');
+const {createTransport} = require("nodemailer");
 
 regauth.use(express.json());
 regauth.use(express.urlencoded({ extended: true }));
+
+
+async function sendEmail(recipient, name, lastName, pass, login) {
+  try {
+    // Настройка транспортного объекта
+    const transporter = createTransport({
+      host: 'smtp.mail.ru', // SMTP-сервер (например, smtp.gmail.com для Gmail)
+      port: 465, // Обычно 587 (TLS) или 465 (SSL)
+      secure: true, // true для порта 465, false для остальных
+      auth: {
+        user: 'Kekhayev.r@mail.ru', // Ваш email
+        pass: 'EATd01zq27ub4pNNZ2Xf', // Ваш пароль
+      },
+      tls: {
+        rejectUnauthorized: false, // Отключает проверку сертификата
+      },
+    });
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+          }
+          .greeting {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+          }
+          .info {
+            font-size: 18px;
+            color: #555;
+          }
+          .info span {
+            font-weight: bold;
+            color: #000;
+          }
+        </style>
+      </head>
+      <body>
+        <p class="greeting">Здравствуйте, <span>${name} ${lastName}</span></p>
+        <p class="info">Login: <span>${login}</span></p>
+        <p class="info">Password: <span>${pass}</span></p>
+      </body>
+      </html>
+    `;
+    // Настройка письма
+    const mailOptions = {
+      from: '"Hakaton task" <Kekhayev.r@mail.ru>', // Отправитель
+      to: recipient, // Получатель (можно указать несколько через запятую)
+      subject: 'Authorization data', // Тема письма
+      html: htmlContent, // HTML-версия письма
+    };
+
+    // Отправка письма
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email отправлен: %s', info.messageId);
+  } catch (error) {
+    console.error('Ошибка при отправке письма:', error);
+  }
+}
 
 
 regauth.post('/student', async (req, res) => {
@@ -27,7 +91,7 @@ regauth.post('/student', async (req, res) => {
 
     // Сохраняем студента и ожидаем результат
     await student.save();
-
+    await sendEmail(email, name, lastname, pass, phone)
     // Если сохранение прошло успешно, отправляем ответ с кодом 201
     return res.status(201).send(resMess);
 
@@ -38,8 +102,38 @@ regauth.post('/student', async (req, res) => {
     return res.status(400).send('Произошла ошибка: ' + error.message);
   }
 });
-regauth.get('/student', (req, res) => {
-  res.send('This is the Profile Page!');
+regauth.post('/student/auth', async (req, res) => {
+  const {phone, pass} = req.body;
+
+  try {
+
+    const student = await Student.findOne({
+      phoneNumber: phone
+    })
+
+    const isMatch = await bcrypt.compare(pass, student.password);
+
+    if(isMatch){
+      res.status(200).json({
+        auth_success: true,
+        id: student._id,
+        name: student.name,
+        last_name: student.lastName,
+      })
+    }else {
+      res.status(403).json({
+        auth_success: false,
+      })
+    }
+
+
+
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+
+    // В случае ошибки отправляем ответ с кодом 400 и сообщением об ошибке
+    return res.status(400).send('Произошла ошибка: ' + error.message);
+  }
 });
 
 
@@ -68,7 +162,7 @@ regauth.post('/teacher', async (req, res) => {
 
     // Сохранение нового преподавателя в базе данных
     await newTeacher.save();
-
+    await sendEmail(email, name, lastName, pass, phoneNumber)
     // Отправка успешного ответа
     return res.status(201).send(resMess);
 
@@ -77,8 +171,37 @@ regauth.post('/teacher', async (req, res) => {
     return res.status(400).send('Произошла ошибка: ' + error.message);
   }
 });
-regauth.get('/teacher', (req, res) => {
-  res.send('This is the Profile Page!');
+regauth.get('/teacher/auth', async (req, res) => {
+  const {phone, pass} = req.body;
+
+  try {
+
+    const teacher = await Teacher.findOne({
+      phoneNumber: phone
+    })
+
+    const isMatch = await bcrypt.compare(pass, teacher.password);
+
+    if (isMatch) {
+      res.status(200).json({
+        auth_success: true,
+        id: teacher._id,
+        name: teacher.name,
+        last_name: teacher.lastName,
+      })
+    } else {
+      res.status(403).json({
+        auth_success: false,
+      })
+    }
+
+
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+
+    // В случае ошибки отправляем ответ с кодом 400 и сообщением об ошибке
+    return res.status(400).send('Произошла ошибка: ' + error.message);
+  }
 });
 
 
@@ -118,3 +241,5 @@ regauth.get('/admin', (req, res) => {
 
 // Экспорт маршрутизатора
 module.exports = regauth;
+
+
