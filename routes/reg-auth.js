@@ -255,7 +255,7 @@ regauth.post('/admin/auth', async (req, res) => {
       res.cookie('userToken', token, {
         httpOnly: true,  // Cookie недоступно через JavaScript на клиенте
         secure: false,   // Установите `true`, если используете HTTPS
-        sameSite: 'lax', // Контроль отправки cookie между сайтами
+        sameSite: 'None', // Контроль отправки cookie между сайтами
         maxAge: 24 * 60 * 60 * 1000,
         crossSite: true// Время жизни cookie (1 день)
       });
