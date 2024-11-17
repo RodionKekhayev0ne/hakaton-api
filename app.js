@@ -14,11 +14,13 @@ const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 // Middleware для обработки данных формы (URL-encoded)
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*',
-  credentials: true,
+  origin: '*', // Разрешить запросы с любых источников
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешить все методы
+  allowedHeaders: ['Content-Type', 'Authorization'], // Разрешить все необходимые заголовки
 }));
 
 
