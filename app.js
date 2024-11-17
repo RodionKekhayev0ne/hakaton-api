@@ -18,9 +18,10 @@ app.use(cors());
 // Middleware для обработки данных формы (URL-encoded)
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*', // Разрешить запросы с любых источников
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешить все методы
-  allowedHeaders: ['Content-Type', 'Authorization'], // Разрешить все необходимые заголовки
+  origin: 'http://209.38.196.77:3001', // Укажите разрешенный источник
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешенные методы
+  allowedHeaders: ['Content-Type', 'Authorization'], // Разрешенные заголовки
+  credentials: true // Разрешить отправку учетных данных (куки, заголовки)
 }));
 
 
