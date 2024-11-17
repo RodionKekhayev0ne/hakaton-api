@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // Определение схемы для пользователя
 const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true},
+  description: {type: String, required: false},
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Teacher',

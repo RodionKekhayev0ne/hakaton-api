@@ -4,25 +4,62 @@ const visit = express.Router();
 const Visit = require('../database/tables/visit');
 const Teacher = require("../database/tables/teacher");
 const Lesson = require("../database/tables/lesson");
+const Student = require("../database/tables/student");
+
+
+function getFormattedDate() {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const monthName = months[now.getMonth()]; // Получаем название месяца
+  const day = String(now.getDate()).padStart(2, '0'); // Делаем день двухзначным
+  const hours = String(now.getHours()).padStart(2, '0'); // Делаем часы двухзначными
+  const minutes = String(now.getMinutes()).padStart(2, '0'); // Делаем минуты двухзначными
+
+  return `${year} ${monthName} ${day} ${hours}:${minutes}`;
+}
+
 // Пример маршрута для главной страницы
 visit.post('/addStudent', async (req, res) => {
   const {visitId, studentId} = req.body;
   try {
-    const updatedVisit = await Visit.findByIdAndUpdate(
-      visitId,
-      {$push: {students: studentId}},
-      {new: true} // Опция возвращает обновленный документ
-    );
-    if (!updatedVisit) {
-      console.log('Запись не найдена');
-    } else {
-      console.log('Студент успешно добавлен:', updatedVisit);
+    const visit = await Visit.findById(visitId)
+    const lesson = await Lesson.findById(visit.lesson);
+    const student = await Student.findById(studentId);
+    if (!lesson) {
+      throw new Error('Урок не найден');
     }
+    // Проверить, есть ли уже студент в списке студентов
+    if (lesson.students.includes(studentId)) {
+      console.log('Студент уже в списке');
+    }else {
+      lesson.students.push(studentId);
+      await lesson.save();
+    }
+    if (student.lessons.includes(visit.lesson)) {
+      console.log('Студент уже в списке');
+    }else {
+      student.lessons.push(visit.lesson);
+      await student.save();
+    }
+
+   if (visit.students.includes(studentId)) {
+      console.log('Студент уже в списке');
+    }else {
+     visit.students.push(studentId);
+      await visit.save();
+    }
+    res.send('Student '+ student.name +' added to ' + visit.dateForCrm + " visit for lesson " + lesson.title);
   } catch (error) {
 
   }
 
-  res.send('Welcome to the Home Page!');
+
 });
 
 // Пример маршрута для страницы профиля
@@ -40,7 +77,7 @@ visit.post('/', (req, res) => {
 
 
 visit.post('/createVisit', async (req, res) => {
-  const dateQuery = req.query.date;
+
   const {phone_number, lesson_title} = req.body;
 
   try {
@@ -50,12 +87,13 @@ visit.post('/createVisit', async (req, res) => {
     console.log(teacher_id + ' - ' + lesson_id)
 
     const newVisit = new Visit({
-      date: dateQuery,
+      date: getFormattedDate().toISOString().split('T')[0],
+      dateForCrm: getFormattedDate(),
       teacher: teacher_id,
       lesson: lesson_id,
     })
     await newVisit.save()
-    res.send('Visit ' + dateQuery + ' created');
+    res.status(200).json({visitId: newVisit._id, lesson: lesson_title});
   }catch (error){
     res.status(400).send('something wrong')
   }

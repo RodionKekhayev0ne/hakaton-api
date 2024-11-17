@@ -10,16 +10,16 @@ const admin = require('./routes/admin-funcs')
 const visit = require('./routes/visit')
 const Admin = require('./database/tables/admin');
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
-
+app.use(cookieParser());
 // Middleware для обработки данных формы (URL-encoded)
 app.use(express.urlencoded({ extended: true }));
-const corsOptions = {
-  origin: 'http://209.38.196.77:3001', // Разрешить доступ только с этого домена
-};
-
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: ['*', 'http://localhost:3001'],
+  credentials: true,
+}));
 
 
 const PORT = 3000;

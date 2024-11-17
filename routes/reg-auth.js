@@ -6,11 +6,13 @@ const Teacher = require('../database/tables/teacher');
 const Admin = require('../database/tables/admin');
 const bcrypt = require('bcrypt');
 const {createTransport} = require("nodemailer");
+const {sign} = require("jsonwebtoken");
+
 
 regauth.use(express.json());
 regauth.use(express.urlencoded({ extended: true }));
 
-
+const SECRET_KEY = 'AffAghhg3hjfe298fh32iuf443f233';
 async function sendEmail(recipient, name, lastName, pass, login) {
   try {
     // Настройка транспортного объекта
@@ -235,8 +237,46 @@ regauth.post('/admin', async (req, res) => {
     return res.status(400).send('Произошла ошибка: ' + error.message);
   }
 });
-regauth.get('/admin', (req, res) => {
-  res.send('This is the Profile Page!');
+regauth.post('/admin/auth', async (req, res) => {
+  const {email, pass} = req.body;
+
+  try {
+
+    const admin = await Admin.findOne({
+      email: email
+    })
+
+    const isMatch = await bcrypt.compare(pass, admin.password);
+
+    if (isMatch) {
+      const token = sign({ id: admin._id, username: admin.email }, SECRET_KEY, {
+        expiresIn: '1h',
+      });
+      res.cookie('userToken', token, {
+        httpOnly: true,  // Cookie недоступно через JavaScript на клиенте
+        secure: false,   // Установите `true`, если используете HTTPS
+        sameSite: 'lax', // Контроль отправки cookie между сайтами
+        maxAge: 24 * 60 * 60 * 1000, // Время жизни cookie (1 день)
+      });
+
+      res.status(200).json({
+        auth_success: true,
+        id: admin._id,
+        name: admin.name
+      })
+    } else {
+      res.status(403).json({
+        auth_success: false,
+      })
+    }
+
+
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+
+    // В случае ошибки отправляем ответ с кодом 400 и сообщением об ошибке
+    return res.status(400).send('Произошла ошибка: ' + error.message);
+  }
 });
 
 // Экспорт маршрутизатора

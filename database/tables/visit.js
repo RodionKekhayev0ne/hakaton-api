@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // Определение схемы для пользователя
 const visitSchema = new mongoose.Schema({
   date: {type: Date, required: true },
+  dateForCrm: {type: String, required: true },
   teacher:  {
   type: mongoose.Schema.Types.ObjectId,
     ref: 'Teacher',
