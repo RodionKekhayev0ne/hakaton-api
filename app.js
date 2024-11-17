@@ -17,7 +17,7 @@ app.use(cookieParser());
 // Middleware для обработки данных формы (URL-encoded)
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ['http://localhost:3001', 'http://209.38.196.77:3001'],
+  origin: '*',
   credentials: true,
 }));
 
