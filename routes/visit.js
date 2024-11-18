@@ -87,7 +87,7 @@ visit.post('/createVisit', async (req, res) => {
     console.log(teacher_id + ' - ' + lesson_id)
 
     const newVisit = new Visit({
-      date: getFormattedDate().toISOString().split('T')[0],
+      date: getFormattedDate(),
       dateForCrm: getFormattedDate(),
       teacher: teacher_id,
       lesson: lesson_id,

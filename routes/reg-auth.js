@@ -116,6 +116,8 @@ regauth.post('/student/auth', async (req, res) => {
     const isMatch = await bcrypt.compare(pass, student.password);
 
     if(isMatch){
+      console.log("Student " + student.name + " authorized")
+
       res.status(200).json({
         auth_success: true,
         id: student._id,
@@ -259,11 +261,13 @@ regauth.post('/admin/auth', async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000, // Время жизни cookie (1 день)
       });
 
+
       res.status(200).json({
         auth_success: true,
         id: admin._id,
         name: admin.name
       })
+
     } else {
       res.status(403).json({
         auth_success: false,
