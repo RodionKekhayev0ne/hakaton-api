@@ -175,14 +175,14 @@ regauth.post('/teacher', async (req, res) => {
     return res.status(400).send('Произошла ошибка: ' + error.message);
   }
 });
-regauth.get('/teacher/auth', async (req, res) => {
+regauth.post('/teacher/auth', async (req, res) => {
   const {phone, pass} = req.body;
 
   try {
 
     const teacher = await Teacher.findOne({
       phoneNumber: phone
-    })
+    }).populate('lessons');
 
     const isMatch = await bcrypt.compare(pass, teacher.password);
 
@@ -192,6 +192,7 @@ regauth.get('/teacher/auth', async (req, res) => {
         id: teacher._id,
         name: teacher.name,
         last_name: teacher.lastName,
+        lessons: teacher.lessons,
       })
     } else {
       res.status(403).json({
