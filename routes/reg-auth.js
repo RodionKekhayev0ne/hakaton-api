@@ -191,6 +191,7 @@ regauth.post('/teacher/auth', async (req, res) => {
         auth_success: true,
         id: teacher._id,
         name: teacher.name,
+        number:teacher.phoneNumber,
         last_name: teacher.lastName,
         lessons: teacher.lessons,
       })

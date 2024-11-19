@@ -54,7 +54,7 @@ visit.post('/addStudent', async (req, res) => {
      visit.students.push(studentId);
       await visit.save();
     }
-    res.send('Student '+ student.name +' added to ' + visit.dateForCrm + " visit for lesson " + lesson.title);
+    res.status(200).json({lesson:lesson.title});
   } catch (error) {
 
   }

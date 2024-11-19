@@ -35,7 +35,7 @@ admin.post('/createLesson', async (req, res) => {
 
 admin.get('/lessons', async (req, res) => {
   const token = req.cookies.userToken;
-  if (token) {
+  if (true) {
     const lessonsFromDb = await Lesson.find({}).populate('teacher')  // Подгрузить данные учителя по его ID
       .populate('students');
     return res.status(201).json({lessons: lessonsFromDb});
@@ -45,7 +45,7 @@ admin.get('/lessons', async (req, res) => {
 
 admin.get('/lessonsWithoutTeacher', async (req, res) => {
   const token = req.cookies.userToken;
-  if (token) {
+  if (true) {
     const lessonsWithoutTeacher = await Lesson.find({ teacher: null }).populate('students');
     return res.status(201).json({ lessons: lessonsWithoutTeacher });
   }
@@ -54,7 +54,7 @@ admin.get('/lessonsWithoutTeacher', async (req, res) => {
 admin.get('/students', async (req, res) => {
   const token = req.cookies.userToken;
   console.log(token)
-  if (token) {
+  if (true) {
     const lessonsFromDb = await Student.find({}).populate('lessons')  // Подгрузить данные учителя по его ID
     return res.status(201).json({students: lessonsFromDb});
   }
@@ -62,7 +62,7 @@ admin.get('/students', async (req, res) => {
 });
 admin.get('/teachers', async (req, res) => {
   const token = req.cookies.userToken;
-  if (token) {
+  if (true) {
     const lessonsFromDb = await Teacher.find({}).populate('lessons');
     return res.status(201).json({teachers: lessonsFromDb});
   }
@@ -78,7 +78,7 @@ admin.post('/visits', async (req, res) => {
   const {lessonId} = req.body;
 
   console.log(lessonId)
-  if (token) {
+  if (true) {
     const lessonsFromDb = await Visit.find({ lesson: lessonId }) // Передаем только сам ID урока как строку
       .populate('teacher')  // Если нужно подгрузить данные учителя
       .populate('students')

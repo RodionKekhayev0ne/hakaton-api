@@ -1,0 +1,14 @@
+
+javascript:S1481%"6Remove the declaration of the unused 'token' variable.(“ªğ8ë¼âª´2J$0722278c-d293-4af8-b6ee-e64c2b856da1
+|javascript:S1854%"3Remove this useless assignment to variable "token".(“ªğ8ë¼âª´2J$4bb1983a-9b20-4f9f-b140-5f52686bd741
+‰javascript:S2589&"@This always evaluates to truthy. Consider refactoring this code.(Ç¿½ú8ë¼âª´2J$8bcb1092-6e06-4703-85b2-b971dd9161df
+javascript:S1481/"6Remove the declaration of the unused 'token' variable.(“ªğ8Õ„ãª´2J$76151eb7-8d36-4613-b6d7-5b069599084e
+|javascript:S1854/"3Remove this useless assignment to variable "token".(“ªğ8Õ„ãª´2J$85c11eaf-6226-40c6-a374-4b26f8a9b94e
+‰javascript:S25890"@This always evaluates to truthy. Consider refactoring this code.(Ç¿½ú8Õ„ãª´2J$2e7ee405-f2cc-4182-99d2-006f6fe8d4ca
+‰javascript:S25899"@This always evaluates to truthy. Consider refactoring this code.(Ç¿½ú8Õ„ãª´2J$f279d609-37b4-4414-8977-43be13674d6a
+javascript:S1481@"6Remove the declaration of the unused 'token' variable.(“ªğ8Õ„ãª´2J$40946e16-1598-4fcd-8989-6c559329717f
+|javascript:S1854@"3Remove this useless assignment to variable "token".(“ªğ8Õ„ãª´2J$3ac944e7-db08-4b70-907c-008eb50edb69
+‰javascript:S2589A"@This always evaluates to truthy. Consider refactoring this code.(Ç¿½ú8Õ„ãª´2J$a178c046-25bb-4f18-a189-74eae6d09abe
+Yjavascript:S1481M"6Remove the declaration of the unused 'token' variable.(“ªğ8Àºåª´2
+Vjavascript:S1854M"3Remove this useless assignment to variable "token".(“ªğ8Àºåª´2
+cjavascript:S2589Q"@This always evaluates to truthy. Consider refactoring this code.(Ç¿½ú8Àºåª´2
