@@ -11,7 +11,7 @@ const visit = require('./routes/visit')
 const Admin = require('./database/tables/admin');
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
-
+const moment = require('moment-timezone');
 app.use(express.json());
 app.use(cookieParser());
 // Middleware для обработки данных формы (URL-encoded)
@@ -21,7 +21,7 @@ app.use(cors({
   credentials: true,
 }));
 
-
+const almatyTime = moment.tz(new Date(), "Asia/Almaty");
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -5,21 +5,19 @@ const Visit = require('../database/tables/visit');
 const Teacher = require("../database/tables/teacher");
 const Lesson = require("../database/tables/lesson");
 const Student = require("../database/tables/student");
+const moment = require('moment-timezone');
 
+const { DateTime } = require('luxon');
 
-function getFormattedDate() {
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+function getAlmatyTime() {
+  // Получаем текущее время в часовом поясе Алматы
+  const almatyTime = DateTime.now().setZone('Asia/Almaty');
 
-  const now = new Date();
-
-  const year = now.getFullYear();
-  const monthName = months[now.getMonth()]; // Получаем название месяца
-  const day = String(now.getDate()).padStart(2, '0'); // Делаем день двухзначным
-  const hours = String(now.getHours()).padStart(2, '0'); // Делаем часы двухзначными
-  const minutes = String(now.getMinutes()).padStart(2, '0'); // Делаем минуты двухзначными
+  const year = almatyTime.year;
+  const monthName = almatyTime.toFormat('MMMM'); // Полное название месяца
+  const day = almatyTime.toFormat('dd'); // Двухзначный день
+  const hours = almatyTime.toFormat('HH'); // Двухзначные часы
+  const minutes = almatyTime.toFormat('mm'); // Двухзначные минуты
 
   return `${year} ${monthName} ${day} ${hours}:${minutes}`;
 }
@@ -86,9 +84,10 @@ visit.post('/createVisit', async (req, res) => {
 
     console.log(teacher_id + ' - ' + lesson_id)
 
+    const almatyTime = moment.tz(new Date(), "Asia/Almaty");
     const newVisit = new Visit({
-      date: getFormattedDate(),
-      dateForCrm: getFormattedDate(),
+      date: getAlmatyTime(),
+      dateForCrm: getAlmatyTime(),
       teacher: teacher_id,
       lesson: lesson_id,
     })
